@@ -13,7 +13,6 @@
 <outline text="Builders - If you have time" title="Builders - If you have time">
   <outline type="rss" text="Builders: If you have time (all sources)" title="Builders: If you have time (all sources)" xmlUrl="https://stephenvdavis-jpg.github.io/builders-feed/if-you-have-time.xml" htmlUrl="https://stephenvdavis-jpg.github.io/builders-feed/"/>
   <outline type="rss" text="r/SideProject" title="r/SideProject" xmlUrl="https://www.reddit.com/r/SideProject/top/.rss?t=day" htmlUrl="https://www.reddit.com/r/SideProject/"/>
-  <outline type="rss" text="CodePen Picks" title="CodePen Picks" xmlUrl="https://codepen.io/picks/feed/" htmlUrl="https://codepen.io/trending"/>
   <outline type="rss" text="selfh.st" title="selfh.st" xmlUrl="https://selfh.st/rss/" htmlUrl="https://selfh.st/apps/"/>
   <outline type="rss" text="Lobsters: show" title="Lobsters: show" xmlUrl="https://lobste.rs/t/show.rss" htmlUrl="https://lobste.rs/t/show"/>
   <outline type="rss" text="Console.dev" title="Console.dev" xmlUrl="https://console.dev/rss.xml" htmlUrl="https://console.dev/"/>
