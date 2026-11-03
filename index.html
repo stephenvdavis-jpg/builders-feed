@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F7F6F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Builders">
+<title>Builders</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23CF4A16'/><path d='M9 11h14M9 16h14M9 21h9' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
+<link rel="alternate" type="application/rss+xml" title="Must see" href="must-see.xml">
+<link rel="alternate" type="application/rss+xml" title="If you have time" href="if-you-have-time.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --page: #F7F6F3; --card: #FFFFFF; --ink: #222222; --muted: #6A6A6A; --line: #E6E4DF;
+  --accent: #CF4A16; --pill: #FFFFFF; --pill-on: #222222; --pill-on-ink: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #141414; --card: #1E1E1E; --ink: #F2F2F2; --muted: #A0A0A0; --line: #2C2C2C;
+    --pill: #1E1E1E; --pill-on: #F2F2F2; --pill-on-ink: #141414;
+  }
+}
+* { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--page); color: var(--ink); font: 400 15px/1.4 "DM Sans", system-ui, sans-serif; }
+a { color: inherit; text-decoration: none; }
+
+.top {
+  position: sticky; top: 0; z-index: 5; display: flex; justify-content: center;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+}
+.seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: 999px; background: var(--pill); box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.05); }
+.seg button {
+  border: 0; background: transparent; color: var(--muted); font: 600 14px/1 "DM Sans", system-ui, sans-serif;
+  padding: 10px 18px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+}
+.seg button[aria-pressed="true"] { background: var(--pill-on); color: var(--pill-on-ink); }
+
+.grid {
+  display: grid; gap: 22px 14px; padding: 8px 16px calc(40px + env(safe-area-inset-bottom));
+  grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 1500px; margin: 0 auto;
+}
+@media (min-width: 680px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; padding-inline: 24px; } }
+@media (min-width: 1000px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1320px) { .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+.card { display: flex; flex-direction: column; min-width: 0; }
+.pic {
+  position: relative; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden;
+  background: var(--line); margin-bottom: 9px;
+}
+.pic { container-type: inline-size; }
+.pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pic img.bg { position: absolute; inset: 0; filter: blur(18px) saturate(1.2); transform: scale(1.25); opacity: .9; }
+.pic.wide img:not(.bg) { position: relative; object-fit: contain; }
+.pic.txt { display: flex; flex-direction: column; justify-content: space-between; padding: 14px; color: #fff; }
+.pic.txt p {
+  font: 600 clamp(13px, 8cqw, 19px)/1.3 "DM Sans", system-ui, sans-serif; letter-spacing: -.01em;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; overflow: hidden;
+}
+.pic.txt .big { font-size: clamp(16px, 10.5cqw, 26px); line-height: 1.18; -webkit-line-clamp: 4; letter-spacing: -.02em; }
+.pic.txt .emo { font-size: 18cqw; line-height: 1; }
+.pic .tag { z-index: 1;
+  position: absolute; left: 8px; top: 8px; padding: 4px 8px; border-radius: 999px;
+  font: 600 11px/1 "DM Sans", system-ui, sans-serif; color: #fff; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); max-width: calc(100% - 16px);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pic.txt .tag { position: static; align-self: flex-start; background: rgba(0,0,0,.22); margin-bottom: 10px; }
+.t { font-weight: 600; font-size: 15px; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.d { color: var(--muted); font-size: 13.5px; line-height: 1.35; margin-top: 3px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.m { color: var(--muted); font-size: 12.5px; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: center; }
+.m a { text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.new { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+.site .pic { display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff; }
+.site .pic b { font-size: 22px; line-height: 1.1; letter-spacing: -.02em; }
+.site .pic span { font-size: 14px; opacity: .8; margin-top: 6px; }
+.site .pic i { position: absolute; right: 14px; top: 12px; font-style: normal; font-size: 22px; opacity: .85; }
+
+.empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 60px 0; }
+@media (hover: hover) { a.card:hover .pic img, .card > a:hover .pic img { transform: scale(1.03); } .pic img { transition: transform .35s ease; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="seg" role="group">
+    <button data-tier="1">Must see</button>
+    <button data-tier="2">If you have time</button>
+  </div>
+</header>
+<main class="grid" id="grid"></main>
+<script>
+const grid = document.getElementById("grid");
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
+let feed = null;
+let tier = store.get("tier") === "2" ? 2 : 1;
+const lastVisit = Number(store.get("lastVisit") || 0);
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const num = n => n >= 10000 ? Math.round(n / 1000) + "k" : n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, "") + "k" : String(n);
+function ago(ts) {
+  const s = Date.now() / 1000 - ts;
+  if (s < 3600) return Math.max(1, Math.round(s / 60)) + "m";
+  if (s < 86400) return Math.round(s / 3600) + "h";
+  return Math.round(s / 86400) + "d";
+}
+
+// Each source in its own rank order, then dealt out one at a time so no site floods the grid
+function mix(items) {
+  const by = new Map();
+  for (const it of items) (by.get(it.src) || by.set(it.src, []).get(it.src)).push(it);
+  const lists = [...by.values()].map(l => l.sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || b.ts - a.ts));
+  lists.sort((a, b) => Math.max(...b.map(i => i.seen)) - Math.max(...a.map(i => i.seen)));
+  const out = [];
+  for (let i = 0; lists.some(l => l[i]); i++) for (const l of lists) if (l[i]) out.push(l[i]);
+  return out;
+}
+
+function textTile(it, src) {
+  const body = it.text && it.text.length > 40 && it.text !== it.title ? it.text : it.title;
+  const emo = it.emoji ? `<span class="emo">${esc(it.emoji)}</span>` : "";
+  return `<div class="pic txt" style="background:${src.color}"><span class="tag">${esc(src.name)}</span>${emo}<p class="${body === it.title ? "big" : ""}">${esc(body)}</p></div>`;
+}
+
+function postCard(it) {
+  const src = feed.sources[it.src];
+  const pic = it.img
+    ? `<div class="pic"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(it.img)}" alt="" data-i="${esc(it.id)}"><span class="tag">${esc(src.name)}</span></div>`
+    : textTile(it, src);
+  const bits = [];
+  if (lastVisit && it.seen > lastVisit) bits.push(`<i class="new"></i>`);
+  if (it.src === "trending") { if (it.score) bits.push(`★ ${num(it.score)} today`); if (it.lang) bits.push(esc(it.lang)); }
+  else if (it.src === "hf") { if (it.score) bits.push(`♥ ${num(it.score)}`); }
+  else {
+    if (!["itch"].includes(it.src)) bits.push(ago(it.ts));
+    if (it.score != null) bits.push(`▲ ${num(it.score)}`);
+  }
+  if (it.discuss && it.discuss !== it.url) bits.push(`<a href="${esc(it.discuss)}" target="_blank" rel="noopener">${it.comments != null ? num(it.comments) + " comments" : "Discuss"}</a>`);
+  else if (it.comments) bits.push(`${num(it.comments)} comments`);
+  const desc = it.img && it.text && it.text !== it.title ? `<div class="d">${esc(it.text)}</div>` : "";
+  return `<div class="card"><a href="${esc(it.url)}" target="_blank" rel="noopener">${pic}<div class="t">${esc(it.title)}</div>${desc}</a><div class="m">${bits.map(b => b.startsWith("<") ? b : `<span>${b}</span>`).join("")}</div></div>`;
+}
+
+function siteCard(s) {
+  return `<a class="card site" href="${esc(s.url)}" target="_blank" rel="noopener"><div class="pic" style="background:${s.color}"><i>↗</i><b>${esc(s.name)}</b><span>${esc(s.line)}</span></div></a>`;
+}
+
+function render() {
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.tier === tier)));
+  if (!feed) return;
+  const posts = mix(feed.items.filter(it => feed.sources[it.src]?.tier === tier));
+  const sites = feed.links.filter(s => s.tier === tier);
+  const every = tier === 1 ? 9 : 6;
+  const html = [];
+  posts.forEach((it, i) => {
+    html.push(postCard(it));
+    const k = (i + 1) / every;
+    if (Number.isInteger(k) && sites.length && (tier === 2 || k === 1)) html.push(siteCard(sites[(k - 1) % sites.length]));
+  });
+  if (!posts.length) html.push(...sites.map(siteCard));
+  grid.innerHTML = html.join("") || `<p class="empty">Nothing yet</p>`;
+  grid.querySelectorAll("img[data-i]").forEach(img => img.addEventListener("load", () => {
+    if (img.naturalWidth / img.naturalHeight > 1.25) {
+      img.parentElement.classList.add("wide");
+      img.insertAdjacentHTML("beforebegin", `<img class="bg" src="${esc(img.src)}" alt="" referrerpolicy="no-referrer">`);
+    }
+  }, { once: true }));
+  grid.querySelectorAll("img[data-i]").forEach(img => img.addEventListener("error", () => {
+    const it = feed.items.find(x => x.id === img.dataset.i);
+    if (it) img.parentElement.outerHTML = textTile(it, feed.sources[it.src]);
+  }, { once: true }));
+}
+
+document.querySelector(".seg").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  tier = +b.dataset.tier;
+  store.set("tier", String(tier));
+  render();
+  window.scrollTo({ top: 0 });
+});
+addEventListener("pagehide", () => feed && store.set("lastVisit", String(feed.built)));
+
+render();
+fetch("data/feed.json", { cache: "no-cache" })
+  .then(r => r.json())
+  .then(f => { feed = f; render(); })
+  .catch(() => { grid.innerHTML = `<p class="empty">Couldn't load the feed</p>`; });
+</script>
+</body>
+</html>
