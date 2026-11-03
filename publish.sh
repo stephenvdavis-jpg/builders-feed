@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 out=$(mktemp -d)
 trap 'rm -rf "$out"' EXIT
 mkdir -p "$out/data"
-cp index.html must-see.xml if-you-have-time.xml "$out/"
+cp index.html must-see.xml if-you-have-time.xml inoreader/builders.opml "$out/"
 cp data/feed.json "$out/data/"
 touch "$out/.nojekyll"
 git -C "$out" init -q -b site
