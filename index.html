@@ -27,7 +27,7 @@
   }
 }
 * { box-sizing: border-box; margin: 0; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
 body { background: var(--page); color: var(--ink); font: 400 15px/1.4 "DM Sans", system-ui, sans-serif; }
 a { color: inherit; text-decoration: none; }
 
@@ -86,6 +86,7 @@ main.grid {
 .site .pic span { font-size: 14px; opacity: .8; margin-top: 6px; }
 .site .pic i { position: absolute; right: 14px; top: 12px; font-style: normal; font-size: 22px; opacity: .85; }
 
+.bar { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
 .bar { display: inline-flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; background: var(--pill); box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.05); position: relative; }
 .bar .seg { padding: 0; box-shadow: none; background: none; }
 .viewbtn { width: 38px; height: 34px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0 0 0 4px; }
@@ -100,6 +101,9 @@ main.grid {
   font: 500 15px/1 "DM Sans", system-ui, sans-serif; padding: 12px; border-radius: 10px; cursor: pointer; text-align: left;
 }
 .menu button[aria-pressed="true"] { background: var(--page); font-weight: 700; }
+.menu button.hot { background: var(--pill-on); color: var(--pill-on-ink); }
+.menu.held { transform-origin: top; animation: pop .14s ease-out; }
+@keyframes pop { from { opacity: 0; transform: scale(.96); } }
 
 /* List: Reddit-style rows */
 .list { max-width: 760px; margin: 0 auto; padding: 4px 0 calc(40px + env(safe-area-inset-bottom)); }
@@ -200,7 +204,7 @@ const store = {
 const VIEWS = ["grid", "list", "swipe", "paper"];
 let feed = null;
 let tier = store.get("tier") === "2" ? 2 : 1;
-let view = VIEWS.includes(store.get("view")) ? store.get("view") : "grid";
+let view = VIEWS.includes(store.get("view2")) ? store.get("view2") : "paper";
 const lastVisit = Number(store.get("lastVisit") || 0);
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -365,16 +369,74 @@ document.querySelector(".seg").addEventListener("click", e => {
   render();
   window.scrollTo({ top: 0 });
 });
-document.querySelector(".viewbtn").addEventListener("click", e => { e.stopPropagation(); menu.classList.toggle("open"); });
-menu.addEventListener("click", e => {
-  const b = e.target.closest("button");
-  if (!b) return;
-  view = b.dataset.view;
-  store.set("view", view);
-  menu.classList.remove("open");
+function pickView(v) {
+  menu.classList.remove("open", "held");
+  if (!v || v === view) return;
+  view = v;
+  store.set("view2", view);
   render();
   window.scrollTo({ top: 0 });
+}
+document.querySelector(".viewbtn").addEventListener("click", e => {
+  e.stopPropagation();
+  menu.style.left = menu.style.right = "";
+  menu.classList.toggle("open");
 });
+menu.addEventListener("click", e => pickView(e.target.closest("button")?.dataset.view));
+
+// Hold anywhere on the pill: the view menu opens under your finger; slide to a view, lift to pick it
+const bar = document.querySelector(".bar");
+let hold = null;
+const hotItem = (x, y) => document.elementFromPoint(x, y)?.closest(".menu button");
+function openHeld(x) {
+  const r = bar.getBoundingClientRect();
+  menu.classList.add("open", "held");
+  const w = menu.offsetWidth;
+  menu.style.right = "auto";
+  menu.style.left = Math.max(0, Math.min(r.width - w, x - r.left - w / 2)) + "px";
+  hold.open = true;
+  navigator.vibrate?.(8);
+}
+bar.addEventListener("pointerdown", e => {
+  if (e.button !== 0 || e.target.closest(".menu")) return;
+  hold = { x: e.clientX, y: e.clientY, open: false, timer: setTimeout(() => hold && openHeld(hold.x), 320) };
+});
+bar.addEventListener("pointermove", e => {
+  if (!hold) return;
+  if (!hold.open && e.clientY - hold.y > 14) { clearTimeout(hold.timer); openHeld(hold.x); }
+  if (!hold.open) return;
+  if (Math.abs(e.clientY - hold.y) > 10 || Math.abs(e.clientX - hold.x) > 10) hold.moved = true;
+  const hot = hotItem(e.clientX, e.clientY);
+  menu.querySelectorAll("button").forEach(b => b.classList.toggle("hot", b === hot));
+});
+function endHold(e, cancel) {
+  if (!hold) return;
+  clearTimeout(hold.timer);
+  const { open: wasOpen, moved } = hold;
+  hold = null;
+  if (!wasOpen) return;
+  suppressClick = true;          // the release must not also count as a tap on the pill
+  setTimeout(() => (suppressClick = false), 400);
+  const hot = !cancel && hotItem(e.clientX, e.clientY);
+  menu.querySelectorAll("button").forEach(b => b.classList.remove("hot"));
+  if (!hot && !moved && !cancel) return;   // held without sliding: leave the menu open to tap
+  pickView(hot?.dataset.view);
+}
+bar.addEventListener("pointerup", e => endHold(e, false));
+bar.addEventListener("pointercancel", e => endHold(e, true));
+bar.addEventListener("contextmenu", e => e.preventDefault());
+
+// A second tap on the same thing within half a second is ignored: nothing opens or flips twice
+let suppressClick = false, lastTap = { el: null, t: 0 };
+document.addEventListener("click", e => {
+  const el = e.target.closest("a, button");
+  if (!el) return;
+  const now = performance.now();
+  if (suppressClick && el.closest(".seg, .viewbtn") || el === lastTap.el && now - lastTap.t < 500) {
+    e.preventDefault(); e.stopImmediatePropagation(); return;
+  }
+  lastTap = { el, t: now };
+}, true);
 document.addEventListener("click", e => { if (!e.target.closest(".bar")) menu.classList.remove("open"); });
 addEventListener("resize", () => document.documentElement.style.setProperty("--bar", document.querySelector(".top").offsetHeight + "px"));
 addEventListener("pagehide", () => feed && store.set("lastVisit", String(feed.built)));
