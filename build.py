@@ -88,7 +88,9 @@ def ts_of(s):
     if not s:
         return NOW
     try:
-        return int(datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp())
+        s = re.sub(r"([+-]\d\d)(\d\d)$", r"\1:\2", s.replace("Z", "+00:00"))   # +0000 -> +00:00
+        s = re.sub(r"(\.\d{6})\d+", r"\1", s)                                    # Python 3.9 wants <= 6 digits
+        return int(datetime.fromisoformat(s).timestamp())
     except ValueError:
         try:
             return int(parsedate_to_datetime(s).timestamp())

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+<head><title>Builders</title></head>
+<body>
+<outline text="Builders · Must see" title="Builders · Must see">
+  <outline type="rss" text="Builders: Must see (all sources)" title="Builders: Must see (all sources)" xmlUrl="https://stephenvdavis-jpg.github.io/builders-feed/must-see.xml" htmlUrl="https://stephenvdavis-jpg.github.io/builders-feed/"/>
+  <outline type="rss" text="Show HN" title="Show HN" xmlUrl="https://hnrss.org/show?points=50" htmlUrl="https://news.ycombinator.com/show"/>
+  <outline type="rss" text="r/coolgithubprojects" title="r/coolgithubprojects" xmlUrl="https://www.reddit.com/r/coolgithubprojects/top/.rss?t=day" htmlUrl="https://www.reddit.com/r/coolgithubprojects/"/>
+  <outline type="rss" text="DEV #showdev" title="DEV #showdev" xmlUrl="https://dev.to/feed/tag/showdev" htmlUrl="https://dev.to/t/showdev"/>
+  <outline type="rss" text="r/selfhosted" title="r/selfhosted" xmlUrl="https://www.reddit.com/r/selfhosted/top/.rss?t=day" htmlUrl="https://www.reddit.com/r/selfhosted/"/>
+  <outline type="rss" text="GitHub Trending" title="GitHub Trending" xmlUrl="https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml" htmlUrl="https://github.com/trending"/>
+</outline>
+<outline text="Builders · If you have time" title="Builders · If you have time">
+  <outline type="rss" text="Builders: If you have time (all sources)" title="Builders: If you have time (all sources)" xmlUrl="https://stephenvdavis-jpg.github.io/builders-feed/if-you-have-time.xml" htmlUrl="https://stephenvdavis-jpg.github.io/builders-feed/"/>
+  <outline type="rss" text="r/SideProject" title="r/SideProject" xmlUrl="https://www.reddit.com/r/SideProject/top/.rss?t=day" htmlUrl="https://www.reddit.com/r/SideProject/"/>
+  <outline type="rss" text="CodePen Picks" title="CodePen Picks" xmlUrl="https://codepen.io/picks/feed/" htmlUrl="https://codepen.io/trending"/>
+  <outline type="rss" text="selfh.st" title="selfh.st" xmlUrl="https://selfh.st/rss/" htmlUrl="https://selfh.st/apps/"/>
+  <outline type="rss" text="Lobsters: show" title="Lobsters: show" xmlUrl="https://lobste.rs/t/show.rss" htmlUrl="https://lobste.rs/t/show"/>
+  <outline type="rss" text="Console.dev" title="Console.dev" xmlUrl="https://console.dev/rss.xml" htmlUrl="https://console.dev/"/>
+  <outline type="rss" text="OpenAlternative" title="OpenAlternative" xmlUrl="https://openalternative.co/rss.xml" htmlUrl="https://openalternative.co/"/>
+  <outline type="rss" text="r/opensource" title="r/opensource" xmlUrl="https://www.reddit.com/r/opensource/top/.rss?t=week" htmlUrl="https://www.reddit.com/r/opensource/"/>
+  <outline type="rss" text="r/InternetIsBeautiful" title="r/InternetIsBeautiful" xmlUrl="https://www.reddit.com/r/InternetIsBeautiful/top/.rss?t=week" htmlUrl="https://www.reddit.com/r/InternetIsBeautiful/"/>
+  <outline type="rss" text="itch.io: new and popular" title="itch.io: new and popular" xmlUrl="https://itch.io/games/new-and-popular.xml" htmlUrl="https://itch.io/games/new-and-popular"/>
+</outline>
+</body>
+</opml>
