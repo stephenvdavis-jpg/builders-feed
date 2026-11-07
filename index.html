@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F7F6F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Builders">
+<title>Builders</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23CF4A16'/><path d='M9 11h14M9 16h14M9 21h9' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
+<link rel="alternate" type="application/rss+xml" title="Must see" href="must-see.xml">
+<link rel="alternate" type="application/rss+xml" title="If you have time" href="if-you-have-time.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --page: #F7F6F3; --card: #FFFFFF; --ink: #222222; --muted: #6A6A6A; --line: #E6E4DF;
+  --accent: #CF4A16; --pill: #FFFFFF; --pill-on: #222222; --pill-on-ink: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #141414; --card: #1E1E1E; --ink: #F2F2F2; --muted: #A0A0A0; --line: #2C2C2C;
+    --pill: #1E1E1E; --pill-on: #F2F2F2; --pill-on-ink: #141414;
+  }
+}
+* { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+body { background: var(--page); color: var(--ink); font: 400 15px/1.4 "DM Sans", system-ui, sans-serif; }
+a { color: inherit; text-decoration: none; }
+
+.top {
+  position: sticky; top: 0; z-index: 5; display: flex; justify-content: center;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+}
+.seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: 999px; background: var(--pill); box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.05); }
+.seg button {
+  border: 0; background: transparent; color: var(--muted); font: 600 14px/1 "DM Sans", system-ui, sans-serif;
+  padding: 10px 18px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+}
+.seg button[aria-pressed="true"] { background: var(--pill-on); color: var(--pill-on-ink); }
+
+main.grid {
+  display: grid; gap: 22px 14px; padding: 8px 16px calc(40px + env(safe-area-inset-bottom));
+  grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 1500px; margin: 0 auto;
+}
+@media (min-width: 680px) { main.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; padding-inline: 24px; } }
+@media (min-width: 1000px) { main.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1320px) { main.grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+.card { display: flex; flex-direction: column; min-width: 0; }
+.pic {
+  position: relative; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden;
+  background: var(--line); margin-bottom: 9px;
+}
+.pic { container-type: inline-size; }
+.pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pic img.bg { position: absolute; inset: 0; filter: blur(18px) saturate(1.2); transform: scale(1.25); opacity: .9; }
+.pic.wide img:not(.bg) { position: relative; object-fit: contain; }
+.pic.txt { display: flex; flex-direction: column; justify-content: space-between; padding: 14px; color: #fff; }
+.pic.txt p {
+  font: 600 clamp(13px, 8cqw, 19px)/1.3 "DM Sans", system-ui, sans-serif; letter-spacing: -.01em;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; overflow: hidden;
+}
+.pic.txt .big { font-size: clamp(16px, 10.5cqw, 26px); line-height: 1.18; -webkit-line-clamp: 4; letter-spacing: -.02em; }
+.pic.txt .emo { font-size: 18cqw; line-height: 1; }
+.pic .tag { z-index: 1;
+  position: absolute; left: 8px; top: 8px; padding: 4px 8px; border-radius: 999px;
+  font: 600 11px/1 "DM Sans", system-ui, sans-serif; color: #fff; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); max-width: calc(100% - 16px);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pic.txt .tag { position: static; align-self: flex-start; background: rgba(0,0,0,.22); margin-bottom: 10px; }
+.t { font-weight: 600; font-size: 15px; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.d { color: var(--muted); font-size: 13.5px; line-height: 1.35; margin-top: 3px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.m { color: var(--muted); font-size: 12.5px; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: center; }
+.m a { text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.new { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+.site .pic { display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff; }
+.site .pic b { font-size: 22px; line-height: 1.1; letter-spacing: -.02em; }
+.site .pic span { font-size: 14px; opacity: .8; margin-top: 6px; }
+.site .pic i { position: absolute; right: 14px; top: 12px; font-style: normal; font-size: 22px; opacity: .85; }
+
+.bar { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+.bar { display: inline-flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; background: var(--pill); box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.05); position: relative; }
+.bar .seg { padding: 0; box-shadow: none; background: none; }
+.viewbtn { width: 38px; height: 34px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0 0 0 4px; }
+.viewbtn svg, .menu svg { width: 20px; height: 20px; }
+.menu {
+  position: absolute; right: 0; top: calc(100% + 8px); background: var(--card); border-radius: 14px; padding: 6px; min-width: 184px;
+  box-shadow: 0 0 0 1px var(--line), 0 12px 32px rgba(0,0,0,.16); display: none;
+}
+.menu.open { display: block; }
+.menu button {
+  display: flex; align-items: center; gap: 12px; width: 100%; border: 0; background: none; color: var(--ink);
+  font: 500 15px/1 "DM Sans", system-ui, sans-serif; padding: 12px; border-radius: 10px; cursor: pointer; text-align: left;
+}
+.menu button[aria-pressed="true"] { background: var(--page); font-weight: 700; }
+.menu button.hot { background: var(--pill-on); color: var(--pill-on-ink); }
+.menu.held { transform-origin: top; animation: pop .14s ease-out; }
+@keyframes pop { from { opacity: 0; transform: scale(.96); } }
+
+/* List: Reddit-style rows */
+.list { max-width: 760px; margin: 0 auto; padding: 4px 0 calc(40px + env(safe-area-inset-bottom)); }
+.row {
+  display: grid; grid-template-columns: 46px minmax(0, 1fr) 76px; gap: 0 12px; align-items: start;
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+}
+.vote { text-align: center; color: var(--muted); font-size: 12px; line-height: 1.1; padding-top: 2px; }
+.vote b { display: block; color: var(--ink); font-size: 14px; margin-top: 3px; }
+.vote.hot b { color: var(--accent); }
+.row .rt { font-weight: 600; font-size: 16px; line-height: 1.3; }
+.row .rd { color: var(--muted); font-size: 14px; line-height: 1.35; margin-top: 3px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.row .m { grid-column: 2; }
+.src { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 500; }
+.src::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--c); }
+.thumb { grid-row: 1 / span 2; grid-column: 3; width: 76px; height: 76px; border-radius: 10px; overflow: hidden; background: var(--line); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 26px; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.row.siterow { grid-template-columns: 46px minmax(0, 1fr); align-items: center; }
+.siterow .vote { font-size: 18px; color: var(--ink); }
+.siterow .rt::after { content: " ↗"; color: var(--muted); }
+
+/* Swipe: one project per screen */
+.swipe {
+  position: fixed; inset: var(--bar, 64px) 0 0 0; overflow-y: auto; scroll-snap-type: y mandatory;
+  overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+}
+.slide {
+  height: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column;
+  padding: 4px 16px calc(18px + env(safe-area-inset-bottom)); max-width: 620px; margin: 0 auto;
+}
+.slide .pic { flex: 1 1 auto; aspect-ratio: auto; min-height: 0; margin-bottom: 14px; border-radius: 16px; }
+.slide .pic.txt { padding: 22px; }
+.slide .pic.txt p { font-size: clamp(20px, 6.4cqw, 30px); -webkit-line-clamp: 9; }
+.slide .pic.txt .big { font-size: clamp(26px, 9cqw, 44px); -webkit-line-clamp: 6; }
+.slide .pic.txt .emo { font-size: 72px; }
+.slide .t { font-size: 22px; line-height: 1.22; letter-spacing: -.015em; -webkit-line-clamp: 3; }
+.slide .d { font-size: 15px; -webkit-line-clamp: 4; margin-top: 6px; }
+.slide .m { font-size: 13.5px; margin-top: 8px; }
+.acts { display: flex; gap: 8px; margin-top: 14px; }
+.acts a { flex: 1; text-align: center; padding: 13px; border-radius: 999px; font-weight: 600; font-size: 15px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+.acts a:first-child { background: var(--pill-on); color: var(--pill-on-ink); box-shadow: none; }
+.slide.siteslide .pic { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; color: #fff; }
+.slide.siteslide .pic b { font-size: 40px; line-height: 1.05; letter-spacing: -.03em; }
+.slide.siteslide .pic span { font-size: 18px; opacity: .8; margin-top: 10px; }
+.slide.siteslide .pic i { position: absolute; right: 24px; top: 20px; font-style: normal; font-size: 32px; }
+
+/* Front page: a newspaper laid out by site */
+.paper { max-width: 1180px; margin: 0 auto; padding: 6px 16px calc(48px + env(safe-area-inset-bottom)); font-family: Georgia, "Times New Roman", serif; }
+.paper .nameplate { text-align: center; border-bottom: 3px double var(--ink); padding: 6px 0 10px; margin-bottom: 18px; }
+.paper .nameplate h1 { font: 700 clamp(38px, 11vw, 72px)/1 Georgia, "Times New Roman", serif; letter-spacing: -.02em; }
+.paper .nameplate div { font: 500 12px/1 "DM Sans", system-ui, sans-serif; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; margin-top: 10px; }
+.lead { display: grid; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid var(--ink); margin-bottom: 20px; }
+@media (min-width: 760px) { .lead { grid-template-columns: 1.4fr 1fr; align-items: center; } }
+.lead .pic { aspect-ratio: 16 / 10; margin: 0; border-radius: 4px; }
+.lead h2 { font: 700 clamp(28px, 7vw, 40px)/1.08 Georgia, serif; letter-spacing: -.015em; }
+.lead p { font-size: 17px; line-height: 1.5; margin-top: 10px; }
+.cols { columns: 300px; column-gap: 32px; column-rule: 1px solid var(--line); }
+.sect { break-inside: avoid; margin-bottom: 26px; }
+.sect h3 { font: 700 12px/1 "DM Sans", system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; border-top: 2px solid var(--ink); padding-top: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; }
+.sect h3 a { color: var(--muted); font-weight: 600; }
+.sect .pic { aspect-ratio: 16 / 9; border-radius: 4px; margin-bottom: 8px; }
+.story { display: block; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.story:last-child { border-bottom: 0; }
+.story h4 { font: 700 18px/1.22 Georgia, serif; }
+.story.top h4 { font-size: 22px; }
+.story p { font-size: 15px; line-height: 1.45; margin-top: 4px; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.story .m { font-family: "DM Sans", system-ui, sans-serif; }
+.elsewhere a { display: block; padding: 8px 0; border-bottom: 1px solid var(--line); font: 700 17px/1.2 Georgia, serif; }
+.elsewhere a span { font: 400 14px/1.2 "DM Sans", system-ui, sans-serif; color: var(--muted); margin-left: 6px; }
+
+.empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 60px 0; }
+@media (hover: hover) { a.card:hover .pic img, .card > a:hover .pic img { transform: scale(1.03); } .pic img { transition: transform .35s ease; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <div class="seg" role="group">
+      <button data-tier="1">Must see</button>
+      <button data-tier="2">If you have time</button>
+    </div>
+    <button class="viewbtn" aria-label="View" aria-haspopup="true"></button>
+    <div class="menu" role="menu">
+      <button data-view="grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg> Grid</button>
+      <button data-view="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg> List</button>
+      <button data-view="swipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18h4" stroke-linecap="round"/></svg> Swipe</button>
+      <button data-view="paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M7 8.5h10M7 12h4.5M7 15.5h4.5M14 12h3v3.5h-3z"/></svg> Front page</button>
+    </div>
+  </div>
+</header>
+<main id="grid"></main>
+<script>
+const grid = document.getElementById("grid");
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
+const VIEWS = ["grid", "list", "swipe", "paper"];
+let feed = null;
+let tier = store.get("tier") === "2" ? 2 : 1;
+let view = VIEWS.includes(store.get("view2")) ? store.get("view2") : "paper";
+const lastVisit = Number(store.get("lastVisit") || 0);
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const num = n => n >= 10000 ? Math.round(n / 1000) + "k" : n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, "") + "k" : String(n);
+const out = (href, inner, cls = "") => `<a${cls ? ` class="${cls}"` : ""} href="${esc(href)}" target="_blank" rel="noopener">${inner}</a>`;
+function ago(ts) {
+  const s = Date.now() / 1000 - ts;
+  if (s < 3600) return Math.max(1, Math.round(s / 60)) + "m";
+  if (s < 86400) return Math.round(s / 3600) + "h";
+  return Math.round(s / 86400) + "d";
+}
+const isNew = it => lastVisit && it.seen > lastVisit;
+const hasText = it => it.text && it.text !== it.title;
+const discussUrl = it => it.discuss && it.discuss !== it.url ? it.discuss : null;
+
+// Each source in its own rank order, then dealt out one at a time so no site floods the feed
+function mix(items) {
+  const by = new Map();
+  for (const it of items) (by.get(it.src) || by.set(it.src, []).get(it.src)).push(it);
+  const lists = [...by.values()].map(l => l.sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || b.ts - a.ts));
+  lists.sort((a, b) => Math.max(...b.map(i => i.seen)) - Math.max(...a.map(i => i.seen)));
+  const res = [];
+  for (let i = 0; lists.some(l => l[i]); i++) for (const l of lists) if (l[i]) res.push(l[i]);
+  return res;
+}
+
+// Posts with site links dropped in between, as [{post}|{site}]
+function withSites(posts, sites, every) {
+  const res = [];
+  posts.forEach((it, i) => {
+    res.push({ post: it });
+    const k = (i + 1) / every;
+    if (Number.isInteger(k) && sites.length && (tier === 2 || k === 1)) res.push({ site: sites[(k - 1) % sites.length] });
+  });
+  if (!posts.length) sites.forEach(site => res.push({ site }));
+  return res;
+}
+
+function scoreBit(it) {
+  if (it.src === "trending") return it.score ? `★ ${num(it.score)} today` : null;
+  if (it.src === "hf") return it.score ? `♥ ${num(it.score)}` : null;
+  return it.score != null ? `▲ ${num(it.score)}` : null;
+}
+
+function meta(it, { score = true, source = false } = {}) {
+  const src = feed.sources[it.src];
+  const bits = [];
+  if (isNew(it)) bits.push(`<i class="new"></i>`);
+  if (source) bits.push(`<span class="src" style="--c:${src.color}">${esc(src.name)}</span>`);
+  if (!["trending", "hf", "itch"].includes(it.src)) bits.push(ago(it.ts));
+  if (it.src === "trending" && it.lang) bits.push(esc(it.lang));
+  if (score && scoreBit(it)) bits.push(scoreBit(it));
+  const d = discussUrl(it);
+  if (d) bits.push(out(d, it.comments != null ? num(it.comments) + " comments" : "Discuss"));
+  else if (it.comments) bits.push(`${num(it.comments)} comments`);
+  return `<div class="m">${bits.map(b => b.startsWith("<") ? b : `<span>${b}</span>`).join("")}</div>`;
+}
+
+function textTile(it, src) {
+  const body = it.text && it.text.length > 40 && it.text !== it.title ? it.text : it.title;
+  const emo = it.emoji ? `<span class="emo">${esc(it.emoji)}</span>` : "";
+  return `<div class="pic txt" style="background:${src.color}"><span class="tag">${esc(src.name)}</span>${emo}<p class="${body === it.title ? "big" : ""}">${esc(body)}</p></div>`;
+}
+
+function pic(it, tag = true) {
+  const src = feed.sources[it.src];
+  if (!it.img) return textTile(it, src);
+  return `<div class="pic"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(it.img)}" alt="" data-i="${esc(it.id)}">${tag ? `<span class="tag">${esc(src.name)}</span>` : ""}</div>`;
+}
+
+// ---- Grid (Explore) ----
+function gridView(posts, sites) {
+  return withSites(posts, sites, tier === 1 ? 9 : 6).map(({ post: it, site: s }) => s
+    ? out(s.url, `<div class="pic" style="background:${s.color}"><i>↗</i><b>${esc(s.name)}</b><span>${esc(s.line)}</span></div>`, "card site")
+    : `<div class="card">${out(it.url, `${pic(it)}<div class="t">${esc(it.title)}</div>${it.img && hasText(it) ? `<div class="d">${esc(it.text)}</div>` : ""}`)}${meta(it)}</div>`
+  ).join("");
+}
+
+// ---- List (Reddit-style) ----
+function listView(posts, sites) {
+  return withSites(posts, sites, tier === 1 ? 12 : 8).map(({ post: it, site: s }) => {
+    if (s) return out(s.url, `<div class="vote" style="color:${s.color}">●</div><div><div class="rt">${esc(s.name)}</div><div class="rd">${esc(s.line)}</div></div>`, "row siterow");
+    const src = feed.sources[it.src];
+    const sb = scoreBit(it);
+    const [sym, n] = sb ? [sb.split(" ")[0], sb.split(" ")[1]] : ["", ""];
+    const thumb = it.img
+      ? `<img loading="lazy" referrerpolicy="no-referrer" src="${esc(it.img)}" alt="" data-i="${esc(it.id)}">`
+      : esc(it.emoji || src.name.replace(/^r\//, "")[0].toUpperCase());
+    return `<div class="row"><div class="vote${it.score >= 100 ? " hot" : ""}">${sym}<b>${n}</b></div>`
+      + out(it.url, `<div class="rt">${esc(it.title)}</div>${hasText(it) ? `<div class="rd">${esc(it.text)}</div>` : ""}`)
+      + out(it.url, thumb, "thumb").replace('class="thumb"', `class="thumb" style="background:${it.img ? "var(--line)" : src.color}"`)
+      + meta(it, { score: false, source: true }) + `</div>`;
+  }).join("");
+}
+
+// ---- Swipe (one per screen) ----
+function swipeView(posts, sites) {
+  return withSites(posts, sites, tier === 1 ? 9 : 6).map(({ post: it, site: s }) => {
+    if (s) return `<section class="slide siteslide">${out(s.url, `<i>↗</i><b>${esc(s.name)}</b><span>${esc(s.line)}</span>`, "pic").replace('class="pic"', `class="pic" style="background:${s.color}"`)}</section>`;
+    const d = discussUrl(it);
+    return `<section class="slide">${pic(it)}<div class="t">${esc(it.title)}</div>${it.img && hasText(it) ? `<div class="d">${esc(it.text)}</div>` : ""}${meta(it)}`
+      + `<div class="acts">${out(it.url, "Open")}${d ? out(d, it.comments != null ? `${num(it.comments)} comments` : "Discuss") : ""}</div></section>`;
+  }).join("");
+}
+
+// ---- Front page (by site) ----
+function paperView(posts, sites) {
+  const order = Object.keys(feed.sources).filter(k => feed.sources[k].tier === tier);
+  const by = Object.fromEntries(order.map(k => [k, posts.filter(p => p.src === k)]));
+  const leadPick = [...posts].filter(p => p.img && !["trending", "hf"].includes(p.src)).sort((a, b) => (b.score ?? 0) - (a.score ?? 0))[0] || posts[0];
+  const date = new Date(feed.built * 1000).toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+  const story = (it, top) => out(it.url, `${top && it.img ? pic(it, false) : ""}<h4>${esc(it.title)}</h4>${(top || !it.img) && hasText(it) ? `<p>${esc(it.text)}</p>` : ""}`, `story${top ? " top" : ""}`) + meta(it);
+  let html = `<div class="nameplate"><h1>Builders</h1><div>${esc(date)} · ${tier === 1 ? "Must see" : "If you have time"}</div></div>`;
+  if (leadPick) html += `<div class="lead">${out(leadPick.url, pic(leadPick))}<div>${out(leadPick.url, `<h2>${esc(leadPick.title)}</h2>${hasText(leadPick) ? `<p>${esc(leadPick.text)}</p>` : ""}`)}${meta(leadPick, { source: true })}</div></div>`;
+  html += `<div class="cols">`;
+  for (const k of order) {
+    const list = by[k].filter(p => p !== leadPick).slice(0, 6);
+    if (!list.length) continue;
+    const src = feed.sources[k];
+    html += `<div class="sect"><h3>${esc(src.name)}${out(src.home, "More ↗")}</h3>${list.map((it, i) => `<div>${story(it, i === 0)}</div>`).join("")}</div>`;
+  }
+  if (sites.length) html += `<div class="sect elsewhere"><h3>Elsewhere</h3>${sites.map(s => out(s.url, `${esc(s.name)}<span>${esc(s.line)}</span>`)).join("")}</div>`;
+  return html + `</div>`;
+}
+
+const RENDER = { grid: gridView, list: listView, swipe: swipeView, paper: paperView };
+
+function render() {
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.tier === tier)));
+  document.querySelectorAll(".menu button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.view === view)));
+  document.querySelector(".viewbtn").innerHTML = document.querySelector(`.menu [data-view="${view}"] svg`).outerHTML;
+  grid.className = view;
+  document.documentElement.style.setProperty("--bar", document.querySelector(".top").offsetHeight + "px");
+  if (!feed) return;
+  const posts = mix(feed.items.filter(it => feed.sources[it.src]?.tier === tier));
+  const sites = feed.links.filter(s => s.tier === tier);
+  grid.innerHTML = RENDER[view](posts, sites) || `<p class="empty">Nothing yet</p>`;
+  grid.scrollTop = 0;
+  grid.querySelectorAll("img[data-i]").forEach(img => {
+    img.addEventListener("load", () => {
+      if (img.parentElement.classList.contains("pic") && img.naturalWidth / img.naturalHeight > 1.25) {
+        img.parentElement.classList.add("wide");
+        img.insertAdjacentHTML("beforebegin", `<img class="bg" src="${esc(img.src)}" alt="" referrerpolicy="no-referrer">`);
+      }
+    }, { once: true });
+    img.addEventListener("error", () => {
+      const it = feed.items.find(x => x.id === img.dataset.i);
+      if (!it) return;
+      const src = feed.sources[it.src];
+      if (img.parentElement.classList.contains("pic")) img.parentElement.outerHTML = textTile(it, src);
+      else { img.parentElement.style.background = src.color; img.outerHTML = esc(it.emoji || src.name.replace(/^r\//, "")[0].toUpperCase()); }
+    }, { once: true });
+  });
+}
+
+const menu = document.querySelector(".menu");
+document.querySelector(".seg").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  tier = +b.dataset.tier;
+  store.set("tier", String(tier));
+  render();
+  window.scrollTo({ top: 0 });
+});
+function pickView(v) {
+  menu.classList.remove("open", "held");
+  if (!v || v === view) return;
+  view = v;
+  store.set("view2", view);
+  render();
+  window.scrollTo({ top: 0 });
+}
+document.querySelector(".viewbtn").addEventListener("click", e => {
+  e.stopPropagation();
+  menu.style.left = menu.style.right = "";
+  menu.classList.toggle("open");
+});
+menu.addEventListener("click", e => pickView(e.target.closest("button")?.dataset.view));
+
+// Hold anywhere on the pill: the view menu opens under your finger; slide to a view, lift to pick it
+const bar = document.querySelector(".bar");
+let hold = null;
+const hotItem = (x, y) => document.elementFromPoint(x, y)?.closest(".menu button");
+function openHeld(x) {
+  const r = bar.getBoundingClientRect();
+  menu.classList.add("open", "held");
+  const w = menu.offsetWidth;
+  menu.style.right = "auto";
+  menu.style.left = Math.max(0, Math.min(r.width - w, x - r.left - w / 2)) + "px";
+  hold.open = true;
+  navigator.vibrate?.(8);
+}
+bar.addEventListener("pointerdown", e => {
+  if (e.button !== 0 || e.target.closest(".menu")) return;
+  hold = { x: e.clientX, y: e.clientY, open: false, timer: setTimeout(() => hold && openHeld(hold.x), 320) };
+});
+bar.addEventListener("pointermove", e => {
+  if (!hold) return;
+  if (!hold.open && e.clientY - hold.y > 14) { clearTimeout(hold.timer); openHeld(hold.x); }
+  if (!hold.open) return;
+  if (Math.abs(e.clientY - hold.y) > 10 || Math.abs(e.clientX - hold.x) > 10) hold.moved = true;
+  const hot = hotItem(e.clientX, e.clientY);
+  menu.querySelectorAll("button").forEach(b => b.classList.toggle("hot", b === hot));
+});
+function endHold(e, cancel) {
+  if (!hold) return;
+  clearTimeout(hold.timer);
+  const { open: wasOpen, moved } = hold;
+  hold = null;
+  if (!wasOpen) return;
+  suppressClick = true;          // the release must not also count as a tap on the pill
+  setTimeout(() => (suppressClick = false), 400);
+  const hot = !cancel && hotItem(e.clientX, e.clientY);
+  menu.querySelectorAll("button").forEach(b => b.classList.remove("hot"));
+  if (!hot && !moved && !cancel) return;   // held without sliding: leave the menu open to tap
+  pickView(hot?.dataset.view);
+}
+bar.addEventListener("pointerup", e => endHold(e, false));
+bar.addEventListener("pointercancel", e => endHold(e, true));
+bar.addEventListener("contextmenu", e => e.preventDefault());
+
+// A second tap on the same thing within half a second is ignored: nothing opens or flips twice
+let suppressClick = false, lastTap = { el: null, t: 0 };
+document.addEventListener("click", e => {
+  const el = e.target.closest("a, button");
+  if (!el) return;
+  const now = performance.now();
+  if (suppressClick && el.closest(".seg, .viewbtn") || el === lastTap.el && now - lastTap.t < 500) {
+    e.preventDefault(); e.stopImmediatePropagation(); return;
+  }
+  lastTap = { el, t: now };
+}, true);
+document.addEventListener("click", e => { if (!e.target.closest(".bar")) menu.classList.remove("open"); });
+addEventListener("resize", () => document.documentElement.style.setProperty("--bar", document.querySelector(".top").offsetHeight + "px"));
+addEventListener("pagehide", () => feed && store.set("lastVisit", String(feed.built)));
+
+render();
+fetch("data/feed.json", { cache: "no-cache" })
+  .then(r => r.json())
+  .then(f => { feed = f; render(); })
+  .catch(() => { grid.innerHTML = `<p class="empty">Couldn't load the feed</p>`; });
+</script>
+</body>
+</html>
